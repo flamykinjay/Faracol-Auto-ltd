@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleet Ledger — Workshop Jobs</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="css/workshop.css">
+  <script src="js/workshop-theme.js"></script>
+</head>
+<body class="workshop-page">
+
+  <div class="workshop-layout">
+
+    <aside class="ws-sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="ws-main">
+
+      <header class="ws-header" style="display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <h1 class="ws-title">Jobs</h1>
+          <p class="ws-subtitle" id="ws-job-count">0 jobs</p>
+        </div>
+        <button type="button" class="ws-btn ws-btn-primary" id="open-intake-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Job Intake
+        </button>
+      </header>
+
+      <main class="ws-content">
+
+        <section class="ws-panel">
+          <div class="ws-search-bar" style="margin-bottom: 14px;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="job-search-input" class="ws-search-input" placeholder="Search by customer name, phone, or plate number...">
+          </div>
+          <div class="ws-date-filter-row">
+            <label class="ws-form-label" for="ws-range-start">From</label>
+            <input type="date" id="ws-range-start" class="ws-form-input" style="width:auto;">
+            <label class="ws-form-label" for="ws-range-end">To</label>
+            <input type="date" id="ws-range-end" class="ws-form-input" style="width:auto;">
+            <button type="button" class="ws-btn ws-btn-secondary ws-btn-sm" id="ws-apply-range-btn">Apply</button>
+            <button type="button" class="ws-btn ws-btn-outline ws-btn-sm" id="ws-clear-range-btn">All Time</button>
+          </div>
+        </section>
+
+        <section class="ws-panel">
+          <div class="ws-table-wrapper">
+            <table class="ws-table" id="jobs-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Vehicle</th>
+                  <th>Repair</th>
+                  <th>Cost</th>
+                  <th>Paid</th>
+                  <th>Balance</th>
+                  <th>Payment</th>
+                  <th>Job Status</th>
+                  <th>Date In</th>
+                  <th class="ws-col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="jobs-table-body"></tbody>
+            </table>
+          </div>
+          <div class="ws-empty-state" id="jobs-empty-state" hidden>
+            <p>No jobs yet. Click "New Job Intake" to bring in your first vehicle.</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="ws-modal-overlay" id="job-modal-overlay" hidden>
+    <div class="ws-modal-card">
+      <div class="ws-modal-header">
+        <h2 class="ws-modal-title" id="job-modal-title">New Job Intake</h2>
+        <button type="button" class="ws-modal-close-btn" id="job-modal-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="job-form" class="ws-modal-body" novalidate>
+        <p class="ws-autofill-note" id="ws-autofill-note" hidden></p>
+
+        <div class="ws-form-grid">
+          <div class="ws-form-group">
+            <label for="job-customer-phone" class="ws-form-label">Customer Phone</label>
+            <input type="tel" id="job-customer-phone" class="ws-form-input" placeholder="e.g. 08012345678" required>
+            <span class="ws-form-error" id="job-customer-phone-error"></span>
+          </div>
+          <div class="ws-form-group">
+            <label for="job-customer-name" class="ws-form-label">Customer Name</label>
+            <input type="text" id="job-customer-name" class="ws-form-input" placeholder="e.g. Tunde Bakare" required>
+            <span class="ws-form-error" id="job-customer-name-error"></span>
+          </div>
+          <div class="ws-form-group">
+            <label for="job-vehicle-type" class="ws-form-label">Vehicle Type</label>
+            <input type="text" id="job-vehicle-type" class="ws-form-input" placeholder="e.g. Honda Accord" required>
+            <span class="ws-form-error" id="job-vehicle-type-error"></span>
+          </div>
+          <div class="ws-form-group">
+            <label for="job-plate-number" class="ws-form-label">Plate Number</label>
+            <input type="text" id="job-plate-number" class="ws-form-input" placeholder="e.g. XYZ-456AB">
+          </div>
+        </div>
+
+        <div class="ws-form-group">
+          <label for="job-repair-description" class="ws-form-label">Repair Description</label>
+          <textarea id="job-repair-description" class="ws-form-input" rows="3" placeholder="e.g. Brake pad replacement, oil change" required></textarea>
+          <span class="ws-form-error" id="job-repair-description-error"></span>
+        </div>
+
+        <div class="ws-form-grid">
+          <div class="ws-form-group">
+            <label for="job-cost" class="ws-form-label">Total Cost (₦)</label>
+            <input type="number" id="job-cost" class="ws-form-input" min="0" required>
+            <span class="ws-form-error" id="job-cost-error"></span>
+          </div>
+          <div class="ws-form-group">
+            <label for="job-amount-paid" class="ws-form-label">Amount Paid Now (₦)</label>
+            <input type="number" id="job-amount-paid" class="ws-form-input" min="0" value="0">
+          </div>
+          <div class="ws-form-group">
+            <label for="job-date-in" class="ws-form-label">Date In</label>
+            <input type="date" id="job-date-in" class="ws-form-input" required>
+          </div>
+          <div class="ws-form-group">
+            <label for="job-status" class="ws-form-label">Job Status</label>
+            <select id="job-status" class="ws-form-input">
+              <option value="in-progress">In Progress</option>
+              <option value="ready-for-pickup">Ready for Pickup</option>
+              <option value="picked-up">Picked Up</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ws-modal-footer">
+          <button type="button" class="ws-btn ws-btn-secondary" id="job-cancel-btn">Cancel</button>
+          <button type="submit" class="ws-btn ws-btn-primary">Save Job</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="ws-modal-overlay" id="delete-job-modal-overlay" hidden>
+    <div class="ws-modal-card" style="max-width: 400px;">
+      <div class="ws-modal-header"><h2 class="ws-modal-title">Delete Job</h2></div>
+      <div class="ws-modal-body"><p>Are you sure you want to remove this job record? This cannot be undone.</p></div>
+      <div class="ws-modal-footer">
+        <button type="button" class="ws-btn ws-btn-secondary" id="delete-job-cancel-btn">Cancel</button>
+        <button type="button" class="ws-btn ws-btn-primary" id="delete-job-confirm-btn" style="background: #7f1d1d;">Delete Job</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ws-receipt" id="ws-receipt">
+    <div class="ws-receipt-header">
+      <div class="ws-receipt-title">Fleet Ledger — Workshop Receipt</div>
+      <div id="receipt-date"></div>
+    </div>
+    <div class="ws-receipt-row"><span>Customer</span><span id="receipt-customer"></span></div>
+    <div class="ws-receipt-row"><span>Phone</span><span id="receipt-phone"></span></div>
+    <div class="ws-receipt-row"><span>Vehicle</span><span id="receipt-vehicle"></span></div>
+    <div class="ws-receipt-row"><span>Plate Number</span><span id="receipt-plate"></span></div>
+    <div class="ws-receipt-row"><span>Repair</span><span id="receipt-repair"></span></div>
+    <div class="ws-receipt-row"><span>Job Status</span><span id="receipt-job-status"></span></div>
+    <div class="ws-receipt-row"><span>Total Cost</span><span id="receipt-cost"></span></div>
+    <div class="ws-receipt-row"><span>Amount Paid</span><span id="receipt-paid"></span></div>
+    <div class="ws-receipt-row ws-receipt-total"><span>Balance Due</span><span id="receipt-balance"></span></div>
+    <p style="margin-top: 20px; text-align: center;">Thank you for your business.</p>
+  </div>
+
+  <div class="ws-toast" id="ws-toast" hidden></div>
+  <script src="../js/utils.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="js/workshop-nav.js"></script>
+  <script src="js/workshop-jobs.js"></script>
+</body>
+</html>

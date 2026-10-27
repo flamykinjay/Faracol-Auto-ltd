@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faracol — Dashboard</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="app-page">
+
+  <div class="app-layout">
+
+    <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="app-main">
+
+      <header class="app-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle" id="header-greeting">Welcome back</p>
+        </div>
+        <div class="header-date" id="header-date"></div>
+      </header>
+
+      <main class="app-content">
+
+        <section class="stat-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-drivers">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-total-drivers">0</span>
+              <span class="stat-label">Total Drivers</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-vehicles">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-total-vehicles">0</span>
+              <span class="stat-label">Total Vehicles</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-payments">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-week-collected">₦0</span>
+              <span class="stat-label">This Week's Collections</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-loans">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-week-outstanding">₦0</span>
+              <span class="stat-label">This Week's Outstanding</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-payments">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-week-net-profit">₦0</span>
+              <span class="stat-label">This Week's Net Profit</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-vehicles">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-alltime-net-profit">₦0</span>
+              <span class="stat-label">All-Time Net Profit</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-loans">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-loans-outstanding">₦0</span>
+              <span class="stat-label">Outstanding on Loans</span>
+            </div>
+          </div>
+
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title">Quick Actions</h2>
+          <div class="quick-actions">
+            <a href="drivers.html" class="quick-action-btn">
+              <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></span>
+              Add Driver
+            </a>
+            <a href="vehicles.html" class="quick-action-btn">
+              <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><line x1="10.5" y1="6.5" x2="10.5" y2="12.5"/><line x1="7.5" y1="9.5" x2="13.5" y2="9.5"/></svg></span>
+              Add Vehicle
+            </a>
+            <a href="payments.html" class="quick-action-btn">
+              <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5h-4a2 2 0 0 1 0-4h4z"/></svg></span>
+              Log Payment
+            </a>
+            <a href="reports.html" class="quick-action-btn">
+              <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></span>
+              View Reports
+            </a>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title">Recent Activity</h2>
+          <ul class="activity-list" id="recent-activity-list"></ul>
+          <div class="empty-state" id="recent-activity-empty">
+            <p>No activity yet. Once you add drivers, vehicles, or payments, they'll show up here.</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

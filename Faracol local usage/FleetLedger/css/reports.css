@@ -1,0 +1,101 @@
+/* =============================================================
+   FLEET LEDGER — REPORTS PAGE STYLES
+   Covers the date filter row, chart grid/canvases, and the
+   news bulletin card feed. Reuses .panel, .data-table, and
+   .status-badge from dashboard.css / tables.css.
+   ============================================================= */
+
+.date-filter-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.date-filter-input {
+  width: auto;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-lg);
+}
+
+.chart-panel {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-panel-wide {
+  grid-column: 1 / -1;
+}
+
+.chart-panel canvas {
+  flex: 1;
+  max-height: 280px;
+}
+
+/* ---------- News Feed ---------- */
+.news-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.news-card {
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+.news-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.news-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.news-card-date {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.news-card-body {
+  margin-top: var(--space-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  white-space: pre-wrap;
+}
+
+.news-card-image {
+  margin-top: var(--space-md);
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.news-card-actions {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+.news-textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.news-image-preview {
+  margin-top: var(--space-sm);
+  max-width: 200px;
+  border-radius: var(--radius-sm);
+}

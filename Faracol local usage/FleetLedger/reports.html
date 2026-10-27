@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faracol — Reports</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/tables.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/reports.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="app-page">
+
+  <div class="app-layout">
+
+    <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="app-main">
+
+      <header class="app-header">
+        <div>
+          <h1 class="page-title">Reports</h1>
+          <p class="page-subtitle">Analytics, driver history, and company updates</p>
+        </div>
+      </header>
+
+      <main class="app-content">
+
+        <section class="panel">
+          <div class="date-filter-row">
+            <label class="form-label" for="report-range-start">From</label>
+            <input type="date" id="report-range-start" class="form-input date-filter-input">
+            <label class="form-label" for="report-range-end">To</label>
+            <input type="date" id="report-range-end" class="form-input date-filter-input">
+            <button type="button" class="btn btn-secondary btn-sm" id="apply-range-btn">Apply</button>
+            <button type="button" class="btn btn-outline btn-sm" id="clear-range-btn">All Time</button>
+          </div>
+        </section>
+
+        <section class="chart-grid">
+          <div class="panel chart-panel">
+            <h2 class="panel-title">Collections vs. Expenses (by Week)</h2>
+            <canvas id="collections-expenses-chart"></canvas>
+          </div>
+
+          <div class="panel chart-panel">
+            <h2 class="panel-title">Payment Status — Current Week</h2>
+            <canvas id="payment-status-chart"></canvas>
+          </div>
+
+          <div class="panel chart-panel chart-panel-wide">
+            <h2 class="panel-title">Cumulative Revenue vs. Expenses</h2>
+            <canvas id="cumulative-chart"></canvas>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title">Top Outstanding Drivers</h2>
+          <div class="table-wrapper">
+            <table class="data-table" id="outstanding-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Driver</th>
+                  <th>Total Outstanding</th>
+                </tr>
+              </thead>
+              <tbody id="outstanding-table-body"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="outstanding-empty-state" hidden>
+            <p>No outstanding balances found for the selected range.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header-row">
+            <h2 class="panel-title">Driver Payment History</h2>
+            <select id="history-driver-select" class="form-input week-selector-input"></select>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table" id="history-table">
+              <thead>
+                <tr>
+                  <th>Week</th>
+                  <th>Target</th>
+                  <th>Paid</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="history-empty-state" hidden>
+            <p>Select a driver above to view their full payment history.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header-row">
+            <h2 class="panel-title">Driver Logs</h2>
+            <select id="log-status-filter" class="form-input week-selector-input">
+              <option value="all">All</option>
+              <option value="open">Open</option>
+              <option value="resolved">Resolved</option>
+            </select>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table" id="logs-table">
+              <thead>
+                <tr>
+                  <th>Driver</th>
+                  <th>Category</th>
+                  <th>Message</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Admin Reply</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="logs-table-body"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="logs-empty-state" hidden>
+            <p>No driver logs yet. Once drivers can submit reports, they'll appear here.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header-row">
+            <h2 class="panel-title">Company News</h2>
+            <button type="button" class="btn btn-primary btn-sm" id="open-add-news-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Post
+            </button>
+          </div>
+          <div class="news-feed" id="news-feed"></div>
+          <div class="empty-state" id="news-empty-state" hidden>
+            <p>No news posted yet. Click "New Post" to share an update.</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="news-modal-overlay" hidden>
+    <div class="modal-card modal-card-lg">
+      <div class="modal-header">
+        <h2 class="modal-title" id="news-modal-title">New Post</h2>
+        <button type="button" class="modal-close-btn" id="news-modal-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="news-form" class="modal-body" novalidate>
+        <div class="form-group">
+          <label for="news-title" class="form-label">Title</label>
+          <input type="text" id="news-title" class="form-input" placeholder="e.g. New maintenance schedule starting August" required>
+          <span class="form-error" id="news-title-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="news-body" class="form-label">Message</label>
+          <textarea id="news-body" class="form-input news-textarea" rows="5" placeholder="Write the full update here..." required></textarea>
+          <span class="form-error" id="news-body-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="news-image" class="form-label">Image (optional)</label>
+          <input type="file" id="news-image" class="form-input" accept="image/*">
+          <img id="news-image-preview" class="news-image-preview" hidden alt="Preview">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="news-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="delete-news-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header"><h2 class="modal-title">Delete Post</h2></div>
+      <div class="modal-body"><p>Are you sure you want to remove this news post? This cannot be undone.</p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="delete-news-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-news-confirm-btn">Delete Post</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="log-reply-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="log-reply-title">Reply to Report</h2>
+        <button type="button" class="modal-close-btn" id="log-reply-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="log-reply-form" class="modal-body" novalidate>
+        <p class="form-section-label" id="log-reply-original-message"></p>
+        <div class="form-group">
+          <label for="log-reply-text" class="form-label">Your Reply</label>
+          <textarea id="log-reply-text" class="form-input news-textarea" rows="4" placeholder="Write your response — the driver will see this on their dashboard."></textarea>
+          <span class="form-error" id="log-reply-text-error"></span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="log-reply-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Reply</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/vendor/chart.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/reports.js"></script>
+</body>
+</html>

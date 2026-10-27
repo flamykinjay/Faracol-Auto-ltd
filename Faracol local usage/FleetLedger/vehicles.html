@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faracol — Vehicles</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/tables.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/vehicles.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="app-page">
+
+  <div class="app-layout">
+
+    <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="app-main">
+
+      <header class="app-header">
+        <div>
+          <h1 class="page-title">Company Vehicles</h1>
+          <p class="page-subtitle" id="vehicle-count-subtitle">0 vehicles</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="open-add-vehicle-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Vehicle
+        </button>
+      </header>
+
+      <main class="app-content">
+
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="vehicle-search-input" class="search-input" placeholder="Search by vehicle type, plate, chassis, or assigned driver...">
+        </div>
+
+        <section class="vehicle-grid" id="vehicle-grid">
+        </section>
+
+        <div class="empty-state" id="vehicles-empty-state" hidden>
+          <p>No vehicles found.</p>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="vehicle-modal-overlay" hidden>
+    <div class="modal-card modal-card-lg">
+
+      <div class="modal-header">
+        <h2 class="modal-title" id="vehicle-modal-title">Add Vehicle</h2>
+        <button type="button" class="modal-close-btn" id="vehicle-modal-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-tabs" id="vehicle-modal-tabs">
+        <button type="button" class="modal-tab modal-tab-active" data-mode="single" id="vehicle-tab-single">Single Vehicle</button>
+        <button type="button" class="modal-tab" data-mode="bulk" id="vehicle-tab-bulk">Multiple Vehicles</button>
+      </div>
+
+      <form id="single-vehicle-form" class="modal-body" novalidate>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="single-veh-type" class="form-label">Vehicle Type</label>
+            <input type="text" id="single-veh-type" class="form-input" placeholder="e.g. Toyota Camry" required>
+            <span class="form-error" id="single-veh-type-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="single-veh-plate" class="form-label">Plate Number</label>
+            <input type="text" id="single-veh-plate" class="form-input" placeholder="e.g. ABC-123XY" required>
+            <span class="form-error" id="single-veh-plate-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="single-veh-chassis" class="form-label">Chassis Number</label>
+            <input type="text" id="single-veh-chassis" class="form-input" placeholder="e.g. JT2BF22K1W0123456" required>
+            <span class="form-error" id="single-veh-chassis-error"></span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="single-veh-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="single-veh-submit-btn">
+            <span class="btn-label">Save Vehicle</span>
+            <span class="btn-spinner" hidden></span>
+          </button>
+        </div>
+      </form>
+
+      <form id="bulk-vehicle-form" class="modal-body" novalidate hidden>
+        <div class="bulk-rows-wrapper" id="bulk-vehicle-rows-wrapper">
+        </div>
+
+        <button type="button" class="btn btn-outline btn-full" id="add-bulk-vehicle-row-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Another Vehicle
+        </button>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="bulk-veh-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="bulk-veh-submit-btn">
+            <span class="btn-label">Save All Vehicles</span>
+            <span class="btn-spinner" hidden></span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="assign-driver-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 class="modal-title">Assign Driver</h2>
+        <button type="button" class="modal-close-btn" id="assign-driver-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="assign-driver-vehicle-label" class="form-section-label"></p>
+        <div class="form-group">
+          <label for="assign-driver-select" class="form-label">Select Driver</label>
+          <select id="assign-driver-select" class="form-input"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="assign-driver-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-primary" id="assign-driver-confirm-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="delete-vehicle-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 class="modal-title">Delete Vehicle</h2>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove this vehicle? If a driver is currently assigned to it, they will remain in the system but show as having no vehicle linked.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="delete-veh-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-veh-confirm-btn">Delete Vehicle</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/vehicles.js"></script>
+</body>
+</html>

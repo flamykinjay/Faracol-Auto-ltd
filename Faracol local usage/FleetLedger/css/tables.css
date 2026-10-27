@@ -1,0 +1,130 @@
+/* =============================================================
+   FLEET LEDGER — DATA TABLE STYLES
+   Reusable table layout shared across drivers, vehicles,
+   maintenance, and reports pages. Depends on design tokens
+   defined in style.css.
+   ============================================================= */
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.data-table thead {
+  background-color: var(--color-surface-alt);
+}
+
+.data-table th {
+  text-align: left;
+  padding: 12px var(--space-md);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table td {
+  padding: 14px var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  vertical-align: middle;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.col-actions {
+  text-align: right;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.driver-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.driver-avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.driver-name {
+  font-weight: 600;
+}
+
+.vehicle-cell-type {
+  font-weight: 500;
+}
+
+.vehicle-cell-plate {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge-on-duty { background-color: rgba(74, 222, 128, 0.12); color: var(--color-success); }
+.status-badge-off-duty { background-color: rgba(148, 163, 184, 0.12); color: var(--color-text-secondary); }
+.status-badge-sick { background-color: rgba(251, 191, 36, 0.12); color: #fbbf24; }
+.status-badge-suspended { background-color: rgba(248, 113, 113, 0.12); color: var(--color-error); }
+
+.status-badge-paid { background-color: rgba(74, 222, 128, 0.12); color: var(--color-success); }
+.status-badge-owing { background-color: rgba(248, 113, 113, 0.12); color: var(--color-error); }
+
+.row-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.row-action-btn:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-alt);
+}
+
+.row-action-btn.row-action-danger:hover {
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
+}
+
+@media (max-width: 768px) {
+  .data-table th,
+  .data-table td {
+    padding: 10px var(--space-sm);
+  }
+}

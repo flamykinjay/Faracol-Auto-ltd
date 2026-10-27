@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faracol — Settings</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/settings.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="app-page">
+
+  <div class="app-layout">
+
+    <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="app-main">
+
+      <header class="app-header">
+        <div>
+          <h1 class="page-title">Settings</h1>
+          <p class="page-subtitle">Backups and account security</p>
+        </div>
+      </header>
+
+      <main class="app-content">
+
+        <section class="panel">
+          <h2 class="panel-title">Data Backup</h2>
+          <p class="settings-description">
+            Everything in Fleet Ledger is stored only on this device. Export a backup regularly to
+            protect against data loss from clearing your browser, reinstalling Windows, or switching computers.
+          </p>
+
+          <div class="settings-row">
+            <div>
+              <span class="settings-row-label">Export Backup</span>
+              <span class="settings-row-hint">Downloads all drivers, vehicles, payments, and other records as a single file.</span>
+            </div>
+            <button type="button" class="btn btn-primary" id="export-backup-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Backup
+            </button>
+          </div>
+
+          <div class="settings-row">
+            <div>
+              <span class="settings-row-label">Restore from Backup</span>
+              <span class="settings-row-hint">Select a previously exported backup file to restore.</span>
+            </div>
+            <div>
+              <input type="file" id="import-file-input" accept="application/json" hidden>
+              <button type="button" class="btn btn-secondary" id="import-backup-btn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Restore Data
+              </button>
+            </div>
+          </div>
+
+          <p class="settings-status" id="settings-status-message"></p>
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title">Change Password</h2>
+          <form id="change-password-form" class="settings-form" novalidate>
+            <div class="form-group">
+              <label for="current-password" class="form-label">Current Password</label>
+              <input type="password" id="current-password" class="form-input" required>
+              <span class="form-error" id="current-password-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="new-password" class="form-label">New Password</label>
+              <input type="password" id="new-password" class="form-input" required>
+              <span class="form-error" id="new-password-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="confirm-new-password" class="form-label">Confirm New Password</label>
+              <input type="password" id="confirm-new-password" class="form-input" required>
+              <span class="form-error" id="confirm-new-password-error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Password</button>
+            <p class="settings-status" id="password-status-message"></p>
+          </form>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="import-warning-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header"><h2 class="modal-title">Existing Data Found</h2></div>
+      <div class="modal-body">
+        <p id="import-warning-text"></p>
+        <p class="settings-warning">This cannot be undone. Make sure you have a current backup of your existing data before continuing.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="import-warning-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="import-warning-confirm-btn">Replace Data</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>

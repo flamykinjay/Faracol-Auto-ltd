@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faracol — Payments</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/tables.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/payments.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="app-page">
+
+  <div class="app-layout">
+
+    <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="app-main">
+
+      <header class="app-header">
+        <div>
+          <h1 class="page-title">Payments</h1>
+          <p class="page-subtitle">
+            <span class="current-week-pill" id="active-week-pill" hidden>
+              <span class="current-week-dot"></span>
+              <span id="active-week-label">No active week</span>
+            </span>
+          </p>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="delete-week-btn">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            Delete Selected Week
+          </button>
+          <button type="button" class="btn btn-primary" id="start-week-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Start New Week
+          </button>
+        </div>
+      </header>
+
+      <main class="app-content">
+
+        <!-- ============================================
+             FINANCE STAT CARDS
+             Color coding: green = money collected/revenue,
+             yellow = expenses (caution), brighter green =
+             net profit (the headline number). Outstanding
+             stays red — it still signals money not yet in hand.
+             ============================================ -->
+        <section class="stat-grid-compact">
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">This Week Collected</span>
+            <span class="stat-compact-value stat-compact-money-in" id="stat-week-collected">₦0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">This Week Expected</span>
+            <span class="stat-compact-value" id="stat-week-expected">₦0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">This Week Outstanding</span>
+            <span class="stat-compact-value stat-compact-warning" id="stat-week-outstanding">₦0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">This Week Expenses</span>
+            <span class="stat-compact-value stat-compact-caution" id="stat-week-expenses">₦0</span>
+          </div>
+          <div class="stat-card-compact stat-card-highlight">
+            <span class="stat-compact-label">This Week Net Profit</span>
+            <span class="stat-compact-value stat-compact-profit" id="stat-week-net-profit">₦0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">All-Time Collected</span>
+            <span class="stat-compact-value stat-compact-money-in" id="stat-alltime-collected">₦0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">All-Time Expenses</span>
+            <span class="stat-compact-value stat-compact-caution" id="stat-alltime-expenses">₦0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">All-Time Outstanding</span>
+            <span class="stat-compact-value stat-compact-warning" id="stat-alltime-outstanding">₦0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">All-Time Revenue</span>
+            <span class="stat-compact-value stat-compact-money-in" id="stat-alltime-revenue">₦0</span>
+          </div>
+          <div class="stat-card-compact stat-card-highlight">
+            <span class="stat-compact-label">All-Time Net Profit</span>
+            <span class="stat-compact-value stat-compact-profit" id="stat-alltime-net-profit">₦0</span>
+          </div>
+        </section>
+
+        <div class="page-tabs">
+          <button type="button" class="page-tab page-tab-active" data-tab="payments" id="tab-payments-view">Payments</button>
+          <button type="button" class="page-tab" data-tab="expenses" id="tab-expenses-view">Expenses</button>
+          <button type="button" class="page-tab" data-tab="misc" id="tab-misc-view">Misc. Income</button>
+        </div>
+
+        <section class="panel" id="payments-tab-content">
+          <div class="panel-header-row">
+            <h2 class="panel-title">Driver Payments — <span id="week-selector-label">—</span></h2>
+            <select id="week-selector" class="form-input week-selector-input"></select>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table" id="payments-table">
+              <thead>
+                <tr>
+                  <th>Driver</th>
+                  <th>Target</th>
+                  <th>Amount Paid</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="payments-table-body">
+              </tbody>
+            </table>
+          </div>
+
+          <div class="empty-state" id="payments-empty-state" hidden>
+            <p>No active week yet. Click "Start New Week" to begin logging payments.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="expenses-tab-content" hidden>
+          <div class="panel-header-row">
+            <h2 class="panel-title">Expenses</h2>
+            <button type="button" class="btn btn-primary" id="open-add-expense-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Expense
+            </button>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table" id="expenses-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-table-body">
+              </tbody>
+            </table>
+          </div>
+
+          <div class="empty-state" id="expenses-empty-state" hidden>
+            <p>No expenses logged yet. Click "Add Expense" to record one.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="misc-tab-content" hidden>
+          <div class="panel-header-row">
+            <h2 class="panel-title">Miscellaneous Income</h2>
+            <button type="button" class="btn btn-primary" id="open-add-misc-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Income
+            </button>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table" id="misc-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="misc-table-body">
+              </tbody>
+            </table>
+          </div>
+
+          <div class="empty-state" id="misc-empty-state" hidden>
+            <p>No miscellaneous income logged yet — e.g. donations, gifts, or other one-off income.</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="log-payment-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="log-payment-title">Log Payment</h2>
+        <button type="button" class="modal-close-btn" id="log-payment-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="log-payment-form" class="modal-body" novalidate>
+        <p class="form-section-label" id="log-payment-target-label"></p>
+        <p class="carry-over-note" id="log-payment-carryover-note" hidden></p>
+        <div class="form-group">
+          <label for="log-payment-amount" class="form-label">Amount Paid (₦)</label>
+          <input type="number" id="log-payment-amount" class="form-input" min="0" required>
+          <span class="form-error" id="log-payment-amount-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="log-payment-notes" class="form-label">Notes (optional)</label>
+          <input type="text" id="log-payment-notes" class="form-input" placeholder="e.g. Paid in two installments">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="log-payment-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="expense-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="expense-modal-title">Add Expense</h2>
+        <button type="button" class="modal-close-btn" id="expense-modal-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="expense-form" class="modal-body" novalidate>
+        <div class="form-group">
+          <label for="expense-category" class="form-label">Category</label>
+          <select id="expense-category" class="form-input">
+            <option value="Fuel">Fuel</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Salary">Salary</option>
+            <option value="Loan Repayment">Loan Repayment</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="expense-description" class="form-label">Description</label>
+          <input type="text" id="expense-description" class="form-input" placeholder="e.g. Fuel top-up for Camry ABC-123XY" required>
+          <span class="form-error" id="expense-description-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="expense-amount" class="form-label">Amount (₦)</label>
+          <input type="number" id="expense-amount" class="form-input" min="0" required>
+          <span class="form-error" id="expense-amount-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="expense-date" class="form-label">Date</label>
+          <input type="date" id="expense-date" class="form-input" required>
+          <span class="form-error" id="expense-date-error"></span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="expense-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="delete-expense-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header"><h2 class="modal-title">Delete Expense</h2></div>
+      <div class="modal-body"><p>Are you sure you want to remove this expense record? This cannot be undone.</p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="delete-expense-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-expense-confirm-btn">Delete Expense</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="misc-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="misc-modal-title">Add Income</h2>
+        <button type="button" class="modal-close-btn" id="misc-modal-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="misc-form" class="modal-body" novalidate>
+        <div class="form-group">
+          <label for="misc-description" class="form-label">Description</label>
+          <input type="text" id="misc-description" class="form-input" placeholder="e.g. Donation from community member" required>
+          <span class="form-error" id="misc-description-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="misc-amount" class="form-label">Amount (₦)</label>
+          <input type="number" id="misc-amount" class="form-input" min="0" required>
+          <span class="form-error" id="misc-amount-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="misc-date" class="form-label">Date</label>
+          <input type="date" id="misc-date" class="form-input" required>
+          <span class="form-error" id="misc-date-error"></span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="misc-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Income</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="delete-misc-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header"><h2 class="modal-title">Delete Income Record</h2></div>
+      <div class="modal-body"><p>Are you sure you want to remove this income record? This cannot be undone.</p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="delete-misc-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-misc-confirm-btn">Delete Income</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="delete-week-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header"><h2 class="modal-title">Delete This Week</h2></div>
+      <div class="modal-body">
+        <p>This will permanently delete the currently selected week and every payment record logged under it. This cannot be undone. Are you sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="delete-week-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-week-confirm-btn">Delete Week</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/payments.js"></script>
+</body>
+</html>

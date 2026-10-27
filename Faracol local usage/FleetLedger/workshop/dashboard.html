@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleet Ledger — Workshop</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="css/workshop.css">
+  <script src="js/workshop-theme.js"></script>
+</head>
+<body class="workshop-page">
+
+  <div class="workshop-layout">
+
+    <aside class="ws-sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="ws-main ws-main-preload" id="ws-main-content">
+
+      <header class="ws-header">
+        <h1 class="ws-title">Workshop Dashboard</h1>
+        <p class="ws-subtitle" id="ws-date"></p>
+      </header>
+
+      <main class="ws-content">
+
+        <!-- ============================================
+             SHOWCASE — single image, rotating caption.
+             Message changes each visit, same pattern as the
+             welcome animation's return messages.
+             ============================================ -->
+        <section class="ws-showcase-wrap" id="ws-showcase-wrap"></section>
+
+        <section class="ws-stat-grid">
+          <div class="ws-stat-card">
+            <div class="ws-stat-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6 2.9 2.9 6-6a4 4 0 0 0 5.4-5.4l-3.5 3.5-2.9-2.9 3.5-3.5z"/></svg>
+            </div>
+            <div>
+              <div class="ws-stat-value" id="stat-active-jobs" data-target="0">0</div>
+              <div class="ws-stat-label">Active Jobs</div>
+            </div>
+          </div>
+
+          <div class="ws-stat-card">
+            <div class="ws-stat-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <div>
+              <div class="ws-stat-value" id="stat-week-revenue" data-target="0">₦0</div>
+              <div class="ws-stat-label">This Week's Revenue</div>
+            </div>
+          </div>
+
+          <div class="ws-stat-card">
+            <div class="ws-stat-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            </div>
+            <div>
+              <div class="ws-stat-value" id="stat-alltime-revenue" data-target="0">₦0</div>
+              <div class="ws-stat-label">All-Time Revenue</div>
+            </div>
+          </div>
+
+          <div class="ws-stat-card">
+            <div class="ws-stat-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+              <div class="ws-stat-value" id="stat-outstanding" data-target="0">₦0</div>
+              <div class="ws-stat-label">Outstanding</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="ws-panel">
+          <h2 class="ws-panel-title">Revenue — Last 7 Days</h2>
+          <div class="ws-chart-wrap">
+            <canvas id="ws-revenue-chart"></canvas>
+          </div>
+        </section>
+
+        <section class="ws-panel">
+          <h2 class="ws-panel-title">Recent Activity</h2>
+          <div id="ws-activity-list"></div>
+          <div class="ws-empty-state" id="ws-activity-empty" hidden>
+            <p>No jobs logged yet. Head to Jobs to bring in your first vehicle.</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="ws-toast" id="ws-toast" hidden></div>
+
+  <script src="../js/vendor/chart.min.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="js/workshop-nav.js"></script>
+  <script src="js/workshop-welcome.js"></script>
+  <script src="js/workshop-showcase.js"></script>
+  <script src="js/workshop-dashboard.js"></script>
+</body>
+</html>

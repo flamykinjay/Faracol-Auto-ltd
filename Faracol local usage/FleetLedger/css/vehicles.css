@@ -1,0 +1,109 @@
+/* =============================================================
+   FLEET LEDGER — VEHICLE CARD GRID STYLES
+   Deliberately distinct from the tabular layout used on the
+   Drivers page — vehicles are physical assets and read better
+   as a card grid than as spreadsheet-style rows.
+   Depends on design tokens defined in style.css.
+   ============================================================= */
+
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+}
+
+.vehicle-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.vehicle-card:hover {
+  border-color: rgba(96, 165, 250, 0.4);
+  transform: translateY(-2px);
+}
+
+.vehicle-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* Distinct blue accent (vs. teal used for drivers) so the two
+   pages are visually distinguishable at a glance. */
+.vehicle-icon-badge {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background-color: rgba(96, 165, 250, 0.12);
+  color: #60a5fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vehicle-card-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.vehicle-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vehicle-type {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.vehicle-plate {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.vehicle-chassis {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.vehicle-card-footer {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.vehicle-driver-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: rgba(45, 212, 191, 0.12);
+  color: var(--color-accent);
+}
+
+.vehicle-driver-badge-unassigned {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 480px) {
+  .vehicle-grid {
+    grid-template-columns: 1fr;
+  }
+}

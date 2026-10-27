@@ -1,0 +1,181 @@
+/* =============================================================
+   FLEET LEDGER — PAYMENTS PAGE STYLES
+   Covers the compact finance stat-card grid, current-week
+   indicator pill, page-level tabs, and carry-over notes.
+   ============================================================= */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.btn-sm {
+  padding: 8px 14px;
+  font-size: var(--font-size-sm);
+}
+
+.current-week-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background-color: rgba(45, 212, 191, 0.12);
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.current-week-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.stat-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-sm);
+}
+
+.stat-card-compact {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-card-highlight {
+  border-color: rgba(45, 212, 191, 0.35);
+  background-color: rgba(45, 212, 191, 0.05);
+}
+
+.stat-compact-label {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.stat-compact-value {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* ---------- Color Coding ----------
+   money-in: collections & revenue — signals healthy cash inflow
+   caution: expenses — money going out, worth watching
+   profit: net profit — the headline number, made brighter/bolder
+   warning: outstanding — unchanged, still needs attention
+   ------------------------------------ */
+.stat-compact-money-in {
+  color: var(--color-success);
+}
+
+.stat-compact-caution {
+  color: #fbbf24;
+}
+
+.stat-compact-profit {
+  color: #4ade80;
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
+}
+
+.stat-compact-warning {
+  color: var(--color-error);
+}
+
+.page-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-tab {
+  background: none;
+  border: none;
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.page-tab:hover {
+  color: var(--color-text-primary);
+}
+
+.page-tab-active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+.panel-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.week-selector-input {
+  width: auto;
+  min-width: 200px;
+}
+
+.balance-owing {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.balance-clear {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.carry-over-note {
+  font-size: var(--font-size-sm);
+  color: #fbbf24;
+  background-color: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+.driver-cell-deleted {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .panel-header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .week-selector-input {
+    width: 100%;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

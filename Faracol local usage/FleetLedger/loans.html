@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faracol — Loans</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/tables.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/payments.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="app-page">
+
+  <div class="app-layout">
+
+    <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="app-main">
+
+      <header class="app-header">
+        <div>
+          <h1 class="page-title">Loans</h1>
+          <p class="page-subtitle" id="loan-count-subtitle">0 loans</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="open-issue-loan-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Issue Loan
+        </button>
+      </header>
+
+      <main class="app-content">
+
+        <!-- ============================================
+             LOAN STAT CARDS
+             ============================================ -->
+        <section class="stat-grid-compact">
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">Active Loans</span>
+            <span class="stat-compact-value" id="stat-active-loan-count">0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">Total Outstanding on Loans</span>
+            <span class="stat-compact-value stat-compact-warning" id="stat-loans-outstanding">₦0</span>
+          </div>
+          <div class="stat-card-compact">
+            <span class="stat-compact-label">Total Repaid (All-Time)</span>
+            <span class="stat-compact-value stat-compact-money-in" id="stat-loans-repaid">₦0</span>
+          </div>
+        </section>
+
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="loan-search-input" class="search-input" placeholder="Search by driver name...">
+        </div>
+
+        <section class="panel">
+          <div class="table-wrapper">
+            <table class="data-table" id="loans-table">
+              <thead>
+                <tr>
+                  <th>Driver</th>
+                  <th>Principal</th>
+                  <th>Repaid</th>
+                  <th>Balance</th>
+                  <th>Date Issued</th>
+                  <th>Status</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="loans-table-body"></tbody>
+            </table>
+          </div>
+
+          <div class="empty-state" id="loans-empty-state" hidden>
+            <p>No loans issued yet. Click "Issue Loan" to record one.</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ============================================
+       ISSUE LOAN MODAL
+       ============================================ -->
+  <div class="modal-overlay" id="loan-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="loan-modal-title">Issue Loan</h2>
+        <button type="button" class="modal-close-btn" id="loan-modal-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="loan-form" class="modal-body" novalidate>
+        <div class="form-group">
+          <label for="loan-driver" class="form-label">Driver</label>
+          <select id="loan-driver" class="form-input" required></select>
+          <span class="form-error" id="loan-driver-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="loan-principal" class="form-label">Loan Amount (₦)</label>
+          <input type="number" id="loan-principal" class="form-input" min="0" required>
+          <span class="form-error" id="loan-principal-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="loan-date-issued" class="form-label">Date Issued</label>
+          <input type="date" id="loan-date-issued" class="form-input" required>
+          <span class="form-error" id="loan-date-issued-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="loan-weekly-repayment" class="form-label">Expected Weekly Repayment (₦, optional)</label>
+          <input type="number" id="loan-weekly-repayment" class="form-input" min="0" placeholder="e.g. 5000">
+        </div>
+        <div class="form-group">
+          <label for="loan-notes" class="form-label">Notes (optional)</label>
+          <input type="text" id="loan-notes" class="form-input" placeholder="e.g. Emergency medical advance">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="loan-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Loan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================
+       LOG REPAYMENT MODAL
+       ============================================ -->
+  <div class="modal-overlay" id="repayment-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="repayment-modal-title">Log Repayment</h2>
+        <button type="button" class="modal-close-btn" id="repayment-modal-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="repayment-form" class="modal-body" novalidate>
+        <p class="form-section-label" id="repayment-balance-label"></p>
+        <div class="form-group">
+          <label for="repayment-amount" class="form-label">Repayment Amount (₦)</label>
+          <input type="number" id="repayment-amount" class="form-input" min="0" required>
+          <span class="form-error" id="repayment-amount-error"></span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="repayment-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Log Repayment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="delete-loan-modal-overlay" hidden>
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header"><h2 class="modal-title">Delete Loan Record</h2></div>
+      <div class="modal-body"><p>Are you sure you want to remove this loan record? This cannot be undone.</p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="delete-loan-cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-loan-confirm-btn">Delete Loan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/loans.js"></script>
+</body>
+</html>

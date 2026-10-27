@@ -1,0 +1,16 @@
+/* =============================================================
+   FLEET LEDGER — MAINTENANCE PAGE STYLES
+   Minimal — this page reuses .data-table (tables.css), .panel
+   and .search-bar (dashboard.css / forms.css) almost entirely.
+   Only a small addition for the "next due" date emphasis.
+   ============================================================= */
+
+.next-due-soon {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.next-due-overdue {
+  color: var(--color-error);
+  font-weight: 600;
+}

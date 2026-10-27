@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleet Ledger — My Dashboard</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="css/driver.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="app-page">
+
+  <div class="app-layout">
+
+    <aside class="sidebar" id="sidebar-placeholder"></aside>
+
+    <div class="app-main">
+
+      <header class="app-header">
+        <div>
+          <h1 class="page-title" id="header-greeting">Welcome back</h1>
+          <p class="page-subtitle" id="header-date"></p>
+        </div>
+      </header>
+
+      <main class="app-content">
+
+        <section class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-payments">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-week-target">₦0</span>
+              <span class="stat-label">This Week's Target</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-drivers">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-week-paid">₦0</span>
+              <span class="stat-label">Amount Paid So Far</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-loans">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-week-balance">₦0</span>
+              <span class="stat-label">Balance Remaining</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-vehicles">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-my-vehicle">—</span>
+              <span class="stat-label">My Vehicle</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="page-tabs">
+          <button type="button" class="page-tab page-tab-active" data-tab="history" id="tab-history-view">Payment History</button>
+          <button type="button" class="page-tab" data-tab="my-reports" id="tab-my-reports-view">My Reports</button>
+          <button type="button" class="page-tab" data-tab="news" id="tab-news-view">Company News</button>
+          <button type="button" class="page-tab" data-tab="submit-log" id="tab-log-view">Submit a Report</button>
+        </div>
+
+        <section class="panel" id="history-tab-content">
+          <h2 class="panel-title">My Payment History</h2>
+          <div class="table-wrapper">
+            <table class="data-table" id="my-history-table">
+              <thead>
+                <tr>
+                  <th>Week</th>
+                  <th>Target</th>
+                  <th>Paid</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="my-history-table-body"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="my-history-empty-state" hidden>
+            <p>No payment history yet.</p>
+          </div>
+        </section>
+
+        <!-- ============================================
+             MY REPORTS TAB
+             Shows every report this driver has submitted,
+             its status, and any reply from the admin.
+             ============================================ -->
+        <section class="panel" id="my-reports-tab-content" hidden>
+          <h2 class="panel-title">My Reports</h2>
+          <div class="reports-list" id="my-reports-list"></div>
+          <div class="empty-state" id="my-reports-empty-state" hidden>
+            <p>You haven't submitted any reports yet.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="news-tab-content" hidden>
+          <h2 class="panel-title">Company News</h2>
+          <div class="news-feed" id="driver-news-feed"></div>
+          <div class="empty-state" id="driver-news-empty-state" hidden>
+            <p>No news posted yet.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="log-tab-content" hidden>
+          <h2 class="panel-title">Submit a Report</h2>
+          <p class="settings-description">
+            Use this to report a vehicle issue, raise a complaint, or send any other message to the admin.
+          </p>
+          <form id="submit-log-form" class="settings-form" novalidate>
+            <div class="form-group">
+              <label for="log-category" class="form-label">Category</label>
+              <select id="log-category" class="form-input">
+                <option value="Vehicle Issue">Vehicle Issue</option>
+                <option value="Complaint">Complaint</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="log-message" class="form-label">Message</label>
+              <textarea id="log-message" class="form-input news-textarea" rows="5" placeholder="Describe the issue or message..." required></textarea>
+              <span class="form-error" id="log-message-error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Report</button>
+            <p class="settings-status" id="log-submit-status"></p>
+          </form>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="js/driver-nav.js"></script>
+  <script src="js/driver-dashboard.js"></script>
+</body>
+</html>
